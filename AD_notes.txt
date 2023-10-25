@@ -1,0 +1,111 @@
+canvas:
+
+bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.img);
+canvas.drawBitmap(bitmap, (getMeasuredWidth() / 2f - bitmap.getWidth() / 2f), (getMeasuredHeight() / 2f - bitmap.getHeight() / 2f), null);
+
+radialGradient(0,0,20,Color.BLUE,Color.GREEN,Shader.TileMode.REPEAT);
+brush = new Paint(Paint.ANTI_ALIAS_FLAG);
+brush.setColor(Color.RED);
+brush.setShader(radialGradient);
+canvas.drawCircle(getMeasuredWidth()/2f, getMeasuredHeight()/2, 308f,brush);
+
+redBrush= new Paint(Paint.ANTI_ALIAS_FLAG);
+redBrush.setColor(Color.RED);
+redBrush.setStrokeWidth(20f);
+canvas.drawLine(0,0,getMeasuredWidth()/2,getMeasuredHeight()/2,redBrush);
+
+---------------------------
+
+animation:
+
+Animation slideup = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.slideup);
+img.addAnimation(slideup);
+
+---------------------------
+
+
+VideoPlayer:
+
+MediaController mediaController = new MediaController(this);
+mediaController.setAnchorView(videoView);
+
+Uri uri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.video);
+videoView.setMediaController(mediaController);
+videoView.setVideoURI(uri);
+videoView.requestFocus();
+videoView.start();
+
+--------------------------
+
+ActionBar:
+
+ActionBar actionBar = getSupportActionBar();
+
+actionBar.setIcon(R.drawable.ic_appicon_foreground);
+
+actionBar.setDisplayUseLogoEnabled(true);
+actionBar.setDisplayShowHomeEnabled(true);
+
+actionBar.setTitle("Zomato");
+actionBar.setSubtitle("Food APP");
+
+
+---------------------------
+
+Fragment Lifecycle Callbacks:
+
+onAttach
+onCreate
+onCreateView
+onViewCreated
+onStart
+onResume
+onPause
+onStop
+onDestroyView
+onDestroy
+onDetach
+
+------------------------
+Notification:
+
+private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            String channelMessage = "Channel Message";
+            String ChannelDescription = "Channel Description";
+
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+
+            NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, channelMessage, importance);
+            notificationChannel.enableVibration(false);
+            notificationChannel.setDescription(ChannelDescription);
+
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(notificationChannel);
+
+        }
+    }
+
+private void sendNotification(String message) {
+        createNotificationChannel();
+
+        Intent intent = new Intent(this, MainActivity2.class);
+        intent.putExtra("message", message);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_MUTABLE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Notification.Builder builder = new Notification.Builder(this, CHANNEL_ID)
+                    .setSmallIcon(R.drawable.ic_launcher_background)
+                    .setContentTitle("Notification Demo")
+                    .setContentText(message)
+                    .setContentIntent(pendingIntent)
+                    .setAutoCancel(false);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.notify(NOTIFICATION_ID, builder.build());
+        }
+    }
+
+
+
